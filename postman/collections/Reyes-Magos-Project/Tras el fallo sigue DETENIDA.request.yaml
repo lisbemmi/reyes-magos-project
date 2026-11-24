@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{baseUrl}}/caravanas/{{caravanaId}}"
+method: GET
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status 200", () => pm.response.to.have.status(200));
+      pm.test("sigue DETENIDA", () => pm.expect(pm.response.json().estado).to.eql("DETENIDA"));
+    language: text/javascript
+order: 35000

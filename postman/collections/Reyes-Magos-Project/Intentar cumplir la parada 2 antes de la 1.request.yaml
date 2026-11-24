@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{baseUrl}}/paradas/{{parada2Id}}/estado"
+method: PATCH
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "estado": "CUMPLIDA"
+    }
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status 409", () => pm.response.to.have.status(409));
+      pm.test("codigo ORDEN_INCUMPLIDO", () => pm.expect(pm.response.json().codigo).to.eql("ORDEN_INCUMPLIDO"));
+    language: text/javascript
+order: 22000

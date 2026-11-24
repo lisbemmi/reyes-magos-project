@@ -1,0 +1,18 @@
+$kind: http-request
+url: "{{baseUrl}}/caravanas/{{caravanaId}}/estado"
+method: PATCH
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "estado": "EN_CAMINO"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status 422", () => pm.response.to.have.status(422));
+      pm.test("codigo ESTRELLA_NUBLADA", () => pm.expect(pm.response.json().codigo).to.eql("ESTRELLA_NUBLADA"));
+    language: text/javascript
+order: 32000

@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{baseUrl}}/caravanas/999"
+method: GET
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status 404", () => pm.response.to.have.status(404));
+      pm.test("codigo NO_ENCONTRADO", () => pm.expect(pm.response.json().codigo).to.eql("NO_ENCONTRADO"));
+    language: text/javascript
+order: 9000

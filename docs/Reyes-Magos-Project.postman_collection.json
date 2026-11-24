@@ -1,20 +1,41 @@
 {
   "info": {
-    "_postman_id": "cd6a236c-f5b2-4226-b9e2-7131918b164f",
+    "_postman_id": "55709e2c-74df-48c9-8459-3538b1959f43",
     "name": "Reyes-Magos-Project",
+    "description": "Ejecutar en orden con:\n\nphp artisan migrate:fresh --seed\n\nel servidor y el mock SOAP.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "58911613",
-    "_collection_link": "https://go.postman.co/collection/58911613-cd6a236c-f5b2-4226-b9e2-7131918b164f?source=collection_link"
+    "_collection_link": "https://go.postman.co/collection/58911613-55709e2c-74df-48c9-8459-3538b1959f43?source=collection_link"
   },
   "item": [
     {
       "name": "Autenticacion Jefe",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+              "pm.collectionVariables.set(\"tokenJefe\", pm.response.json().token);"
+            ]
+          }
+        }
+      ],
       "request": {
+        "auth": {
+          "type": "noauth"
+        },
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"email\": \"jefe@polonorte.test\",\r\n    \"password\": \"ReyesMagos2026\"\r\n}",
+          "raw": "{\n  \"email\": \"jefe@polonorte.test\",\n  \"password\": \"{{password}}\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -22,17 +43,11 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/login",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/login",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "login"
           ]
         }
@@ -41,12 +56,32 @@
     },
     {
       "name": "Autenticacion Pastor",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+              "pm.collectionVariables.set(\"tokenPastor\", pm.response.json().token);"
+            ]
+          }
+        }
+      ],
       "request": {
+        "auth": {
+          "type": "noauth"
+        },
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"email\": \"pastor@belen.test\",\r\n    \"password\": \"ReyesMagos2026\"\r\n}",
+          "raw": "{\n  \"email\": \"pastor@belen.test\",\n  \"password\": \"{{password}}\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -54,17 +89,57 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/login",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/login",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login con credenciales invalidas",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 401\", () => pm.response.to.have.status(401));",
+              "pm.test(\"codigo CREDENCIALES_INVALIDAS\", () => pm.expect(pm.response.json().codigo).to.eql(\"CREDENCIALES_INVALIDAS\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"jefe@polonorte.test\",\n  \"password\": \"incorrecta\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
             "login"
           ]
         }
@@ -73,22 +148,30 @@
     },
     {
       "name": "Crear una caravana",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set(\"caravanaId\", pm.response.json().id);",
+              "pm.test(\"nace DETENIDA\", () => pm.expect(pm.response.json().estado).to.eql(\"DETENIDA\"));"
+            ]
+          }
+        }
+      ],
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
-        },
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"rey\": \"MELCHOR\",\r\n    \"ofrenda\": \"ORO\",\r\n    \"origen\": \"Persia\",\r\n    \"camellos\": 5\r\n}",
+          "raw": "{\n  \"rey\": \"MELCHOR\",\n  \"ofrenda\": \"ORO\",\n  \"origen\": \"Persia\",\n  \"camellos\": 5\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -96,17 +179,11 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas"
           ]
         }
@@ -115,21 +192,29 @@
     },
     {
       "name": "Listar caravanas",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
       "request": {
+        "auth": {
+          "type": "noauth"
+        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas"
           ]
         }
@@ -138,21 +223,29 @@
     },
     {
       "name": "Filtrar por estado",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
       "request": {
+        "auth": {
+          "type": "noauth"
+        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas?estado=DETENIDA",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas?estado=DETENIDA",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas"
           ],
           "query": [
@@ -167,21 +260,30 @@
     },
     {
       "name": "Filtro Incorrecto",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"codigo VALIDACION_FALLIDA\", () => pm.expect(pm.response.json().codigo).to.eql(\"VALIDACION_FALLIDA\"));"
+            ]
+          }
+        }
+      ],
       "request": {
+        "auth": {
+          "type": "noauth"
+        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas?estado=XYZ",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas?estado=XYZ",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas"
           ],
           "query": [
@@ -196,23 +298,31 @@
     },
     {
       "name": "Consultar detalle",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
       "request": {
+        "auth": {
+          "type": "noauth"
+        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas/1",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas",
-            "1"
+            "{{caravanaId}}"
           ]
         }
       },
@@ -220,21 +330,30 @@
     },
     {
       "name": "Caravana inexistente",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 404\", () => pm.response.to.have.status(404));",
+              "pm.test(\"codigo NO_ENCONTRADO\", () => pm.expect(pm.response.json().codigo).to.eql(\"NO_ENCONTRADO\"));"
+            ]
+          }
+        }
+      ],
       "request": {
+        "auth": {
+          "type": "noauth"
+        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas/999",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas/999",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas",
             "999"
           ]
@@ -243,23 +362,30 @@
       "response": []
     },
     {
-      "name": "Datos inválidos",
+      "name": "Datos invalidos",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"codigo VALIDACION_FALLIDA\", () => pm.expect(pm.response.json().codigo).to.eql(\"VALIDACION_FALLIDA\"));"
+            ]
+          }
+        }
+      ],
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
-        },
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"rey\": \"GASPAR\",\r\n    \"ofrenda\": \"INCIENSO\",\r\n    \"origen\": \"Arabia\",\r\n    \"camellos\": 20\r\n}",
+          "raw": "{\n  \"rey\": \"GASPAR\",\n  \"ofrenda\": \"INCIENSO\",\n  \"origen\": \"Arabia\",\n  \"camellos\": 20\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -267,17 +393,11 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas"
           ]
         }
@@ -286,22 +406,29 @@
     },
     {
       "name": "Rey repetido",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 409\", () => pm.response.to.have.status(409));",
+              "pm.test(\"codigo REY_DUPLICADO\", () => pm.expect(pm.response.json().codigo).to.eql(\"REY_DUPLICADO\"));"
+            ]
+          }
+        }
+      ],
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
-        },
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"rey\": \"MELCHOR\",\r\n    \"ofrenda\": \"ORO\",\r\n    \"origen\": \"Persia\",\r\n    \"camellos\": 5\r\n}",
+          "raw": "{\n  \"rey\": \"MELCHOR\",\n  \"ofrenda\": \"ORO\",\n  \"origen\": \"Persia\",\n  \"camellos\": 5\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -309,17 +436,11 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas"
           ]
         }
@@ -328,15 +449,32 @@
     },
     {
       "name": "Crear sin token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 401\", () => pm.response.to.have.status(401));",
+              "pm.test(\"codigo NO_AUTENTICADO\", () => pm.expect(pm.response.json().codigo).to.eql(\"NO_AUTENTICADO\"));"
+            ]
+          }
+        }
+      ],
       "request": {
         "auth": {
           "type": "noauth"
         },
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"rey\": \"BALTAZAR\",\r\n    \"ofrenda\": \"MIRRA\",\r\n    \"origen\": \"Arabia\",\r\n    \"camellos\": 4\r\n}",
+          "raw": "{\n  \"rey\": \"BALTASAR\",\n  \"ofrenda\": \"MIRRA\",\n  \"origen\": \"Arabia\",\n  \"camellos\": 4\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -344,17 +482,11 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas"
           ]
         }
@@ -363,22 +495,39 @@
     },
     {
       "name": "Crear con rol insuficiente",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 403\", () => pm.response.to.have.status(403));",
+              "pm.test(\"codigo PROHIBIDO\", () => pm.expect(pm.response.json().codigo).to.eql(\"PROHIBIDO\"));"
+            ]
+          }
+        }
+      ],
       "request": {
         "auth": {
           "type": "bearer",
           "bearer": [
             {
               "key": "token",
-              "value": "6|Uz5jGDT5UGTglwoMiVI7lLKD4NurLct802lYEMoM89ff5645",
+              "value": "{{tokenPastor}}",
               "type": "string"
             }
           ]
         },
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"rey\": \"BALTAZAR\",\r\n    \"ofrenda\": \"MIRRA\",\r\n    \"origen\": \"Arabia\",\r\n    \"camellos\": 4\r\n}",
+          "raw": "{\n  \"rey\": \"BALTASAR\",\n  \"ofrenda\": \"MIRRA\",\n  \"origen\": \"Arabia\",\n  \"camellos\": 4\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -386,17 +535,11 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas"
           ]
         }
@@ -405,22 +548,28 @@
     },
     {
       "name": "Actualizar caravana",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
-        },
         "method": "PUT",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"rey\": \"MELCHOR\",\r\n    \"ofrenda\": \"ORO\",\r\n    \"origen\": \"Persia\",\r\n    \"camellos\": 6\r\n}",
+          "raw": "{\n  \"rey\": \"MELCHOR\",\n  \"ofrenda\": \"ORO\",\n  \"origen\": \"Persia\",\n  \"camellos\": 6\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -428,19 +577,13 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas/1",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas",
-            "1"
+            "{{caravanaId}}"
           ]
         }
       },
@@ -448,22 +591,29 @@
     },
     {
       "name": "Crear la primera parada (Babilonia)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set(\"parada1Id\", pm.response.json().id);"
+            ]
+          }
+        }
+      ],
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
-        },
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"ciudad\": \"Babilonia\",\r\n    \"orden\": 1,\r\n    \"diasEstancia\": 2\r\n}",
+          "raw": "{\n  \"ciudad\": \"Babilonia\",\n  \"orden\": 1,\n  \"diasEstancia\": 2\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -471,19 +621,13 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas/1/paradas",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}/paradas",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas",
-            "1",
+            "{{caravanaId}}",
             "paradas"
           ]
         }
@@ -491,23 +635,30 @@
       "response": []
     },
     {
-      "name": "Crear la segunda y tercera parada",
+      "name": "Crear la segunda parada (Damasco)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set(\"parada2Id\", pm.response.json().id);"
+            ]
+          }
+        }
+      ],
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
-        },
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"ciudad\": \"Jerusalén\",\r\n    \"orden\": 3,\r\n    \"diasEstancia\": 2\r\n}",
+          "raw": "{\n  \"ciudad\": \"Damasco\",\n  \"orden\": 2,\n  \"diasEstancia\": 1\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -515,19 +666,58 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas/1/paradas",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}/paradas",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas",
-            "1",
+            "{{caravanaId}}",
+            "paradas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear la tercera parada (Jerusalen)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set(\"parada3Id\", pm.response.json().id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ciudad\": \"Jerusalén\",\n  \"orden\": 3,\n  \"diasEstancia\": 2\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}/paradas",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "caravanas",
+            "{{caravanaId}}",
             "paradas"
           ]
         }
@@ -536,33 +726,31 @@
     },
     {
       "name": "Listar las paradas",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
       "request": {
         "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
+          "type": "noauth"
         },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas/1/paradas",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}/paradas",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas",
-            "1",
+            "{{caravanaId}}",
             "paradas"
           ]
         }
@@ -571,22 +759,29 @@
     },
     {
       "name": "Intentar repetir un orden",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 409\", () => pm.response.to.have.status(409));",
+              "pm.test(\"codigo ORDEN_DUPLICADO\", () => pm.expect(pm.response.json().codigo).to.eql(\"ORDEN_DUPLICADO\"));"
+            ]
+          }
+        }
+      ],
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
-        },
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"ciudad\": \"Alejandría\",\r\n    \"orden\": 1,\r\n    \"diasEstancia\": 2\r\n}",
+          "raw": "{\n  \"ciudad\": \"Alejandría\",\n  \"orden\": 1,\n  \"diasEstancia\": 2\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -594,19 +789,13 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas/1/paradas",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}/paradas",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas",
-            "1",
+            "{{caravanaId}}",
             "paradas"
           ]
         }
@@ -614,23 +803,30 @@
       "response": []
     },
     {
-      "name": "Enviar días de estancia inválidos",
+      "name": "Enviar dias de estancia invalidos",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"codigo VALIDACION_FALLIDA\", () => pm.expect(pm.response.json().codigo).to.eql(\"VALIDACION_FALLIDA\"));"
+            ]
+          }
+        }
+      ],
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
-        },
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"ciudad\": \"Alejandría\",\r\n    \"orden\": 4,\r\n    \"diasEstancia\": 9\r\n}",
+          "raw": "{\n  \"ciudad\": \"Alejandría\",\n  \"orden\": 4,\n  \"diasEstancia\": 9\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -638,19 +834,13 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas/1/paradas",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}/paradas",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas",
-            "1",
+            "{{caravanaId}}",
             "paradas"
           ]
         }
@@ -659,22 +849,29 @@
     },
     {
       "name": "Crear parada en una caravana inexistente",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 404\", () => pm.response.to.have.status(404));",
+              "pm.test(\"codigo NO_ENCONTRADO\", () => pm.expect(pm.response.json().codigo).to.eql(\"NO_ENCONTRADO\"));"
+            ]
+          }
+        }
+      ],
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
-        },
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"ciudad\": \"Alejandría\",\r\n    \"orden\": 1,\r\n    \"diasEstancia\": 2\r\n}",
+          "raw": "{\n  \"ciudad\": \"Alejandría\",\n  \"orden\": 1,\n  \"diasEstancia\": 2\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -682,17 +879,11 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas/999/paradas",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas/999/paradas",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas",
             "999",
             "paradas"
@@ -703,22 +894,32 @@
     },
     {
       "name": "Intentar cumplir la parada 2 antes de la 1",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 409\", () => pm.response.to.have.status(409));",
+              "pm.test(\"codigo ORDEN_INCUMPLIDO\", () => pm.expect(pm.response.json().codigo).to.eql(\"ORDEN_INCUMPLIDO\"));"
+            ]
+          }
+        }
+      ],
       "request": {
         "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
+          "type": "noauth"
         },
         "method": "PATCH",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"estado\": \"CUMPLIDA\"\r\n}",
+          "raw": "{\n  \"estado\": \"CUMPLIDA\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -726,19 +927,13 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/paradas/2/estado",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/paradas/{{parada2Id}}/estado",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "paradas",
-            "2",
+            "{{parada2Id}}",
             "estado"
           ]
         }
@@ -747,66 +942,31 @@
     },
     {
       "name": "Marcar Babilonia como cumplida",
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "PATCH",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"estado\": \"CUMPLIDA\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+            ]
           }
-        },
-        "url": {
-          "raw": "http://127.0.0.1:8000/api/paradas/1/estado",
-          "protocol": "http",
-          "host": [
-            "127",
-            "0",
-            "0",
-            "1"
-          ],
-          "port": "8000",
-          "path": [
-            "api",
-            "paradas",
-            "1",
-            "estado"
-          ]
         }
-      },
-      "response": []
-    },
-    {
-      "name": "Volver a marcar Damasco como cumplida",
+      ],
       "request": {
         "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
+          "type": "noauth"
         },
         "method": "PATCH",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"estado\": \"CUMPLIDA\"\r\n}",
+          "raw": "{\n  \"estado\": \"CUMPLIDA\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -814,19 +974,13 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/paradas/2/estado",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/paradas/{{parada1Id}}/estado",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "paradas",
-            "2",
+            "{{parada1Id}}",
             "estado"
           ]
         }
@@ -835,22 +989,32 @@
     },
     {
       "name": "Intentar cumplir Babilonia otra vez",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 409\", () => pm.response.to.have.status(409));",
+              "pm.test(\"codigo TRANSICION_INVALIDA\", () => pm.expect(pm.response.json().codigo).to.eql(\"TRANSICION_INVALIDA\"));"
+            ]
+          }
+        }
+      ],
       "request": {
         "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
+          "type": "noauth"
         },
         "method": "PATCH",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"estado\": \"CUMPLIDA\"\r\n}",
+          "raw": "{\n  \"estado\": \"CUMPLIDA\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -858,19 +1022,13 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/paradas/1/estado",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/paradas/{{parada1Id}}/estado",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "paradas",
-            "1",
+            "{{parada1Id}}",
             "estado"
           ]
         }
@@ -879,22 +1037,32 @@
     },
     {
       "name": "Intentar cambiar a PLANIFICADA",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"codigo VALIDACION_FALLIDA\", () => pm.expect(pm.response.json().codigo).to.eql(\"VALIDACION_FALLIDA\"));"
+            ]
+          }
+        }
+      ],
       "request": {
         "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
+          "type": "noauth"
         },
         "method": "PATCH",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"estado\": \"PLANIFICADA\"\r\n}",
+          "raw": "{\n  \"estado\": \"PLANIFICADA\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -902,19 +1070,13 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/paradas/1/estado",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/paradas/{{parada1Id}}/estado",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "paradas",
-            "1",
+            "{{parada1Id}}",
             "estado"
           ]
         }
@@ -923,67 +1085,536 @@
     },
     {
       "name": "Intentar eliminar una parada cumplida",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 409\", () => pm.response.to.have.status(409));",
+              "pm.test(\"codigo PARADA_NO_ELIMINABLE\", () => pm.expect(pm.response.json().codigo).to.eql(\"PARADA_NO_ELIMINABLE\"));"
+            ]
+          }
+        }
+      ],
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
-        },
         "method": "DELETE",
         "header": [],
         "url": {
-          "raw": "http://127.0.0.1:8000/api/paradas/1",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/paradas/{{parada1Id}}",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "paradas",
-            "1"
+            "{{parada1Id}}"
           ]
         }
       },
       "response": []
     },
     {
-      "name": "Eliminar la parada 3 (Jerusalén)",
+      "name": "Eliminar la parada 3 (Jerusalen)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 204\", () => pm.response.to.have.status(204));"
+            ]
+          }
+        }
+      ],
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
-        },
         "method": "DELETE",
         "header": [],
         "url": {
-          "raw": "http://127.0.0.1:8000/api/paradas/3",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/paradas/{{parada3Id}}",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "paradas",
-            "3"
+            "{{parada3Id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Transicion invalida (DETENIDA a EN_BELEN)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 409\", () => pm.response.to.have.status(409));",
+              "pm.test(\"codigo TRANSICION_INVALIDA\", () => pm.expect(pm.response.json().codigo).to.eql(\"TRANSICION_INVALIDA\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"EN_BELEN\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}/estado",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "caravanas",
+            "{{caravanaId}}",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Estado inexistente",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"codigo VALIDACION_FALLIDA\", () => pm.expect(pm.response.json().codigo).to.eql(\"VALIDACION_FALLIDA\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"HOLA\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}/estado",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "caravanas",
+            "{{caravanaId}}",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Cambiar estado sin token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 401\", () => pm.response.to.have.status(401));",
+              "pm.test(\"codigo NO_AUTENTICADO\", () => pm.expect(pm.response.json().codigo).to.eql(\"NO_AUTENTICADO\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"EN_CAMINO\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}/estado",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "caravanas",
+            "{{caravanaId}}",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Origen Nublada",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rey\": \"MELCHOR\",\n  \"ofrenda\": \"ORO\",\n  \"origen\": \"Nublada\",\n  \"camellos\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "caravanas",
+            "{{caravanaId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Estrella NUBLADA (422)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 422\", () => pm.response.to.have.status(422));",
+              "pm.test(\"codigo ESTRELLA_NUBLADA\", () => pm.expect(pm.response.json().codigo).to.eql(\"ESTRELLA_NUBLADA\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"EN_CAMINO\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}/estado",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "caravanas",
+            "{{caravanaId}}",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Origen Herodes",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rey\": \"MELCHOR\",\n  \"ofrenda\": \"ORO\",\n  \"origen\": \"Herodes\",\n  \"camellos\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "caravanas",
+            "{{caravanaId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "SOAP caido - Fault (503)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 503\", () => pm.response.to.have.status(503));",
+              "pm.test(\"codigo SERVICIO_EXTERNO_NO_DISPONIBLE\", () => pm.expect(pm.response.json().codigo).to.eql(\"SERVICIO_EXTERNO_NO_DISPONIBLE\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"EN_CAMINO\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}/estado",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "caravanas",
+            "{{caravanaId}}",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Tras el fallo sigue DETENIDA",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"sigue DETENIDA\", () => pm.expect(pm.response.json().estado).to.eql(\"DETENIDA\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "caravanas",
+            "{{caravanaId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Origen Lento",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rey\": \"MELCHOR\",\n  \"ofrenda\": \"ORO\",\n  \"origen\": \"Lento\",\n  \"camellos\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "caravanas",
+            "{{caravanaId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "SOAP caido - Timeout (503)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 503\", () => pm.response.to.have.status(503));",
+              "pm.test(\"codigo SERVICIO_EXTERNO_NO_DISPONIBLE\", () => pm.expect(pm.response.json().codigo).to.eql(\"SERVICIO_EXTERNO_NO_DISPONIBLE\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"EN_CAMINO\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}/estado",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "caravanas",
+            "{{caravanaId}}",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Origen Persia",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rey\": \"MELCHOR\",\n  \"ofrenda\": \"ORO\",\n  \"origen\": \"Persia\",\n  \"camellos\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "caravanas",
+            "{{caravanaId}}"
           ]
         }
       },
@@ -991,22 +1622,29 @@
     },
     {
       "name": "Cambiar estado OK (Persia)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"EN_CAMINO\", () => pm.expect(pm.response.json().estado).to.eql(\"EN_CAMINO\"));"
+            ]
+          }
+        }
+      ],
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "6|Uz5jGDT5UGTglwoMiVI7lLKD4NurLct802lYEMoM89ff5645",
-              "type": "string"
-            }
-          ]
-        },
         "method": "PATCH",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"estado\": \"EN_CAMINO\"\r\n}",
+          "raw": "{\n  \"estado\": \"EN_CAMINO\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -1014,19 +1652,13 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas/1/estado",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}/estado",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas",
-            "1",
+            "{{caravanaId}}",
             "estado"
           ]
         }
@@ -1034,23 +1666,211 @@
       "response": []
     },
     {
-      "name": "SOAP caído (Herodes)",
+      "name": "Paradas pendientes (422)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 422\", () => pm.response.to.have.status(422));",
+              "pm.test(\"codigo PARADAS_PENDIENTES\", () => pm.expect(pm.response.json().codigo).to.eql(\"PARADAS_PENDIENTES\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"EN_BELEN\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}/estado",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "caravanas",
+            "{{caravanaId}}",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Marcar Damasco como cumplida",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
       "request": {
         "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "6|Uz5jGDT5UGTglwoMiVI7lLKD4NurLct802lYEMoM89ff5645",
-              "type": "string"
-            }
-          ]
+          "type": "noauth"
         },
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"CUMPLIDA\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/paradas/{{parada2Id}}/estado",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "paradas",
+            "{{parada2Id}}",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Llegar a Belen",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"EN_BELEN\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}/estado",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "caravanas",
+            "{{caravanaId}}",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Agregar parada a caravana en EN_BELEN",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 409\", () => pm.response.to.have.status(409));",
+              "pm.test(\"codigo CARAVANA_CERRADA\", () => pm.expect(pm.response.json().codigo).to.eql(\"CARAVANA_CERRADA\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ciudad\": \"Belén\",\n  \"orden\": 4,\n  \"diasEstancia\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}/paradas",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "caravanas",
+            "{{caravanaId}}",
+            "paradas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Editar caravana que no esta DETENIDA",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 409\", () => pm.response.to.have.status(409));",
+              "pm.test(\"codigo CARAVANA_NO_EDITABLE\", () => pm.expect(pm.response.json().codigo).to.eql(\"CARAVANA_NO_EDITABLE\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
         "method": "PUT",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"rey\": \"MELCHOR\",\r\n    \"ofrenda\": \"ORO\",\r\n    \"origen\": \"Herodes\",\r\n    \"camellos\": 5\r\n}",
+          "raw": "{\n  \"rey\": \"MELCHOR\",\n  \"ofrenda\": \"ORO\",\n  \"origen\": \"Persia\",\n  \"camellos\": 5\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -1058,42 +1878,42 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas/1",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas",
-            "1"
+            "{{caravanaId}}"
           ]
         }
       },
       "response": []
     },
     {
-      "name": "SOAP caído (Herodes) Copy",
+      "name": "Entregar ofrenda",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
-        },
         "method": "PATCH",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"estado\": \"EN_CAMINO\"\r\n}",
+          "raw": "{\n  \"estado\": \"OFRENDA_ENTREGADA\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -1101,19 +1921,13 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas/1/estado",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}/estado",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas",
-            "1",
+            "{{caravanaId}}",
             "estado"
           ]
         }
@@ -1121,66 +1935,30 @@
       "response": []
     },
     {
-      "name": "SOAP caído (Herodes) Copy 2",
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "PUT",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"rey\": \"MELCHOR\",\r\n    \"ofrenda\": \"ORO\",\r\n    \"origen\": \"Lento\",\r\n    \"camellos\": 5\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
+      "name": "Cambio desde estado final",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 409\", () => pm.response.to.have.status(409));",
+              "pm.test(\"codigo TRANSICION_INVALIDA\", () => pm.expect(pm.response.json().codigo).to.eql(\"TRANSICION_INVALIDA\"));"
+            ]
           }
-        },
-        "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas/1",
-          "protocol": "http",
-          "host": [
-            "127",
-            "0",
-            "0",
-            "1"
-          ],
-          "port": "8000",
-          "path": [
-            "api",
-            "caravanas",
-            "1"
-          ]
         }
-      },
-      "response": []
-    },
-    {
-      "name": "ERROR 503",
+      ],
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
-              "type": "string"
-            }
-          ]
-        },
         "method": "PATCH",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"estado\": \"EN_CAMINO\"\r\n}",
+          "raw": "{\n  \"estado\": \"DETENIDA\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -1188,24 +1966,62 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/api/caravanas/1/estado",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/caravanas/{{caravanaId}}/estado",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{baseUrl}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "caravanas",
-            "1",
+            "{{caravanaId}}",
             "estado"
           ]
         }
       },
       "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{tokenJefe}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8000/api"
+    },
+    {
+      "key": "password",
+      "value": "ReyesMagos2026"
+    },
+    {
+      "key": "tokenJefe",
+      "value": ""
+    },
+    {
+      "key": "tokenPastor",
+      "value": ""
+    },
+    {
+      "key": "caravanaId",
+      "value": ""
+    },
+    {
+      "key": "parada1Id",
+      "value": ""
+    },
+    {
+      "key": "parada2Id",
+      "value": ""
+    },
+    {
+      "key": "parada3Id",
+      "value": ""
     }
   ]
 }

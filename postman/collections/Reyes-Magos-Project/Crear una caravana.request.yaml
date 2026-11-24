@@ -1,0 +1,22 @@
+$kind: http-request
+url: "{{baseUrl}}/caravanas"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "rey": "MELCHOR",
+      "ofrenda": "ORO",
+      "origen": "Persia",
+      "camellos": 5
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status 201", () => pm.response.to.have.status(201));
+      pm.collectionVariables.set("caravanaId", pm.response.json().id);
+      pm.test("nace DETENIDA", () => pm.expect(pm.response.json().estado).to.eql("DETENIDA"));
+    language: text/javascript
+order: 4000

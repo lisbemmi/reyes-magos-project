@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{baseUrl}}/caravanas/{{caravanaId}}/paradas"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "ciudad": "Damasco",
+      "orden": 2,
+      "diasEstancia": 1
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status 201", () => pm.response.to.have.status(201));
+      pm.collectionVariables.set("parada2Id", pm.response.json().id);
+    language: text/javascript
+order: 16000

@@ -1,0 +1,18 @@
+$kind: http-request
+url: "{{baseUrl}}/caravanas/{{caravanaId}}/estado"
+method: PATCH
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "estado": "EN_CAMINO"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status 503", () => pm.response.to.have.status(503));
+      pm.test("codigo SERVICIO_EXTERNO_NO_DISPONIBLE", () => pm.expect(pm.response.json().codigo).to.eql("SERVICIO_EXTERNO_NO_DISPONIBLE"));
+    language: text/javascript
+order: 37000

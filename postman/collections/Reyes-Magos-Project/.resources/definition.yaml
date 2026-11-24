@@ -1,0 +1,20 @@
+$kind: collection
+description: |-
+  Ejecutar en orden con: php artisan migrate:fresh --seed
+
+  el servidor y el mock SOAP.
+variables:
+  baseUrl: http://127.0.0.1:8000/api
+  password: ReyesMagos2026
+  tokenJefe: ""
+  tokenPastor: ""
+  caravanaId: ""
+  parada1Id: ""
+  parada2Id: ""
+  parada3Id: ""
+auth:
+  - id: f2de987a-acd8-42e8-8798-fd68b7682807
+    type: bearer
+    name: bearer auth
+    credentials:
+      token: "{{tokenJefe}}"
