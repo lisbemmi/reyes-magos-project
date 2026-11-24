@@ -1,0 +1,1211 @@
+{
+  "info": {
+    "_postman_id": "cd6a236c-f5b2-4226-b9e2-7131918b164f",
+    "name": "Reyes-Magos-Project",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58911613",
+    "_collection_link": "https://go.postman.co/collection/58911613-cd6a236c-f5b2-4226-b9e2-7131918b164f?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Autenticacion Jefe",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"jefe@polonorte.test\",\r\n    \"password\": \"ReyesMagos2026\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/login",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Autenticacion Pastor",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"pastor@belen.test\",\r\n    \"password\": \"ReyesMagos2026\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/login",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear una caravana",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"rey\": \"MELCHOR\",\r\n    \"ofrenda\": \"ORO\",\r\n    \"origen\": \"Persia\",\r\n    \"camellos\": 5\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar caravanas",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Filtrar por estado",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas?estado=DETENIDA",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas"
+          ],
+          "query": [
+            {
+              "key": "estado",
+              "value": "DETENIDA"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Filtro Incorrecto",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas?estado=XYZ",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas"
+          ],
+          "query": [
+            {
+              "key": "estado",
+              "value": "XYZ"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Consultar detalle",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas/1",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Caravana inexistente",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas/999",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas",
+            "999"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Datos inválidos",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"rey\": \"GASPAR\",\r\n    \"ofrenda\": \"INCIENSO\",\r\n    \"origen\": \"Arabia\",\r\n    \"camellos\": 20\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Rey repetido",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"rey\": \"MELCHOR\",\r\n    \"ofrenda\": \"ORO\",\r\n    \"origen\": \"Persia\",\r\n    \"camellos\": 5\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear sin token",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"rey\": \"BALTAZAR\",\r\n    \"ofrenda\": \"MIRRA\",\r\n    \"origen\": \"Arabia\",\r\n    \"camellos\": 4\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear con rol insuficiente",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "6|Uz5jGDT5UGTglwoMiVI7lLKD4NurLct802lYEMoM89ff5645",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"rey\": \"BALTAZAR\",\r\n    \"ofrenda\": \"MIRRA\",\r\n    \"origen\": \"Arabia\",\r\n    \"camellos\": 4\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar caravana",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"rey\": \"MELCHOR\",\r\n    \"ofrenda\": \"ORO\",\r\n    \"origen\": \"Persia\",\r\n    \"camellos\": 6\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas/1",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear la primera parada (Babilonia)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"ciudad\": \"Babilonia\",\r\n    \"orden\": 1,\r\n    \"diasEstancia\": 2\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas/1/paradas",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas",
+            "1",
+            "paradas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear la segunda y tercera parada",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"ciudad\": \"Jerusalén\",\r\n    \"orden\": 3,\r\n    \"diasEstancia\": 2\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas/1/paradas",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas",
+            "1",
+            "paradas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar las paradas",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas/1/paradas",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas",
+            "1",
+            "paradas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Intentar repetir un orden",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"ciudad\": \"Alejandría\",\r\n    \"orden\": 1,\r\n    \"diasEstancia\": 2\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas/1/paradas",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas",
+            "1",
+            "paradas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Enviar días de estancia inválidos",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"ciudad\": \"Alejandría\",\r\n    \"orden\": 4,\r\n    \"diasEstancia\": 9\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas/1/paradas",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas",
+            "1",
+            "paradas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear parada en una caravana inexistente",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"ciudad\": \"Alejandría\",\r\n    \"orden\": 1,\r\n    \"diasEstancia\": 2\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas/999/paradas",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas",
+            "999",
+            "paradas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Intentar cumplir la parada 2 antes de la 1",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"estado\": \"CUMPLIDA\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/paradas/2/estado",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "paradas",
+            "2",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Marcar Babilonia como cumplida",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"estado\": \"CUMPLIDA\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/paradas/1/estado",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "paradas",
+            "1",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Volver a marcar Damasco como cumplida",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"estado\": \"CUMPLIDA\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/paradas/2/estado",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "paradas",
+            "2",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Intentar cumplir Babilonia otra vez",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"estado\": \"CUMPLIDA\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/paradas/1/estado",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "paradas",
+            "1",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Intentar cambiar a PLANIFICADA",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"estado\": \"PLANIFICADA\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/paradas/1/estado",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "paradas",
+            "1",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Intentar eliminar una parada cumplida",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/paradas/1",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "paradas",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar la parada 3 (Jerusalén)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/paradas/3",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "paradas",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Cambiar estado OK (Persia)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "6|Uz5jGDT5UGTglwoMiVI7lLKD4NurLct802lYEMoM89ff5645",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"estado\": \"EN_CAMINO\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas/1/estado",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas",
+            "1",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "SOAP caído (Herodes)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "6|Uz5jGDT5UGTglwoMiVI7lLKD4NurLct802lYEMoM89ff5645",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"rey\": \"MELCHOR\",\r\n    \"ofrenda\": \"ORO\",\r\n    \"origen\": \"Herodes\",\r\n    \"camellos\": 5\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas/1",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "SOAP caído (Herodes) Copy",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"estado\": \"EN_CAMINO\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas/1/estado",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas",
+            "1",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "SOAP caído (Herodes) Copy 2",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"rey\": \"MELCHOR\",\r\n    \"ofrenda\": \"ORO\",\r\n    \"origen\": \"Lento\",\r\n    \"camellos\": 5\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas/1",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "ERROR 503",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "4|GTjailoZJvhRcloOCiVP4sJ2We4xUxTCYWht7jPt87c51138",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"estado\": \"EN_CAMINO\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/caravanas/1/estado",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "caravanas",
+            "1",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
