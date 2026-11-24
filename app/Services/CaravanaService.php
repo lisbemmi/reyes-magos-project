@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\EstadoCaravana;
 use App\Enums\EstadoParada;
 use App\Exceptions\ReglaNegocioException;
 use App\Exceptions\TransicionInvalidaException;
