@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\VerificarRol;
 use App\Exceptions\ApiException;
 use App\Exceptions\ApiExceptionRenderer;
 use Illuminate\Foundation\Application;
@@ -15,8 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // API pura: nunca redirigir a una pantalla de login, siempre responder 401 en JSON
         $middleware->redirectGuestsTo(fn () => null);
+        $middleware->alias(['rol' => VerificarRol::class]);
     })
     
     ->withExceptions(function (Exceptions $exceptions): void {

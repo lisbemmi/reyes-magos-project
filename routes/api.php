@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
-use App\Exceptions\TransicionInvalidaException;
 
-Route::get('/prueba/409', fn () => throw new TransicionInvalidaException('DETENIDA', 'EN_BELEN'));
-Route::post('/prueba/400', fn (Request $r) => $r->validate(['origen' => 'required|string']));
-Route::middleware('auth:sanctum')->get('/prueba/protegida', fn () => ['ok' => true]);
+Route::post('/login', [AuthController::class, 'login']);
+
+// TEMPORAL: para probar 401/403.
+Route::middleware(['auth:sanctum', 'rol:JEFE_CARAVANA'])
+    ->get('/prueba/solo-jefe', fn () => ['ok' => true]);
