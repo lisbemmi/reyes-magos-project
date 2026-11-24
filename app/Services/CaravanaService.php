@@ -2,13 +2,21 @@
 
 namespace App\Services;
 
-use App\Enums\EstadoCaravana;
+use App\Enums\EstadoParada;
+use App\Exceptions\ReglaNegocioException;
+use App\Exceptions\TransicionInvalidaException;
+use App\Enums\Visibilidad;
+use App\Integrations\Soap\EstrellaGateway;
 use App\Exceptions\ConflictoException;
 use App\Models\Caravana;
 use Illuminate\Support\Collection;
 
 class CaravanaService
 {
+    public function __construct(private EstrellaGateway $estrella)
+    {
+    }
+
     public function listar(?string $estado = null): Collection
     {
         return Caravana::query()
@@ -37,6 +45,45 @@ class CaravanaService
 
         $this->validarUnicidad($datos, $caravana->id);
         $caravana->update($datos);
+
+        return $caravana;
+    }
+
+    public function cambiarEstado(Caravana $caravana, EstadoCaravana $nuevo): Caravana
+    {
+        $actual = $caravana->estado;
+
+        // Reglas 1: solo transiciones válidas (409)
+        if (! $actual->puedePasarA($nuevo)) {
+            throw new TransicionInvalidaException($actual->value, $nuevo->value);
+        }
+
+        // Regla 2: para salir hay que consultar la estrella (503 si falla, 422 si está nublada)
+        if ($nuevo === EstadoCaravana::EN_CAMINO) {
+            $ruta = $this->estrella->consultarRuta($caravana->origen);
+
+            if ($ruta->visibilidad === Visibilidad::NUBLADA) {
+                throw new ReglaNegocioException(
+                    'La estrella está nublada: la caravana no puede avanzar',
+                    'ESTRELLA_NUBLADA',
+                    [['diasRestantes' => $ruta->diasRestantes]]
+                );
+            }
+        }
+
+        // Regla 3: para llegar a Belén no puede quedar ninguna parada PLANIFICADA (422)
+        if ($nuevo === EstadoCaravana::EN_BELEN) {
+            $pendientes = $caravana->paradas()->where('estado', EstadoParada::PLANIFICADA)->count();
+
+            if ($pendientes > 0) {
+                throw new ReglaNegocioException(
+                    "Hay {$pendientes} parada(s) todavía PLANIFICADA(S)",
+                    'PARADAS_PENDIENTES'
+                );
+            }
+        }
+
+        $caravana->update(['estado' => $nuevo]);
 
         return $caravana;
     }

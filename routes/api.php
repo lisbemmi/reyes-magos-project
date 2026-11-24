@@ -19,4 +19,5 @@ Route::middleware(['auth:sanctum', 'rol:JEFE_CARAVANA'])->group(function () {
     Route::put('/caravanas/{caravana}', [CaravanaController::class, 'update']);
     Route::post('/caravanas/{caravana}/paradas', [ParadaController::class, 'store']);
     Route::delete('/paradas/{parada}', [ParadaController::class, 'destroy']);
+    Route::patch('/caravanas/{caravana}/estado', [CaravanaController::class, 'updateEstado']);
 });

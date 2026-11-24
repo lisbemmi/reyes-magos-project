@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\CambiarEstadoCaravanaRequest;
 use App\Enums\EstadoCaravana;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CaravanaRequest;
@@ -43,5 +44,12 @@ class CaravanaController extends Controller
     public function update(CaravanaRequest $request, Caravana $caravana): CaravanaResource
     {
         return new CaravanaResource($this->servicio->actualizar($caravana, $request->validated()));
+    }
+
+    public function updateEstado(CambiarEstadoCaravanaRequest $request, Caravana $caravana): CaravanaResource
+    {
+        $nuevo = EstadoCaravana::from($request->validated('estado'));
+
+        return new CaravanaResource($this->servicio->cambiarEstado($caravana, $nuevo));
     }
 }

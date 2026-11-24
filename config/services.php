@@ -14,6 +14,12 @@ return [
     |
     */
 
+    'estrella' => [
+    'url' => env('ESTRELLA_URL'),
+    'timeout' => (int) env('ESTRELLA_TIMEOUT', 3),
+    'soap_action' => env('ESTRELLA_SOAP_ACTION', ''),
+    ],
+
     'postmark' => [
         'key' => env('POSTMARK_API_KEY'),
     ],
